@@ -60,4 +60,11 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
-Simpleweather
+.DS_Store
+Simpleweather/SimpleweatherUITests
+Simpleweather/SimpleweatherTests
+Simpleweather/Simpleweather.xcodeproj
+Simpleweather/Simpleweather/Assets.xcassets/Contents.json
+Simpleweather/Simpleweather/Assets.xcassets/AppIcon.appiconset/Contents.json
+Simpleweather/Simpleweather/Assets.xcassets/AccentColor.colorset
+Simpleweather/Simpleweather/Assets.xcassets/Colors/Contents.json

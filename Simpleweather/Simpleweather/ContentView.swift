@@ -8,35 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var isNight = false
+    
     var body: some View {
         ZStack {
-            LinearGradient(colors:[.blue, .white],
-                           startPoint: .topLeading,
-                           endPoint: .bottomTrailing)
-                .edgesIgnoringSafeArea(.all) // back ground color can ingnore safa area
             
-            VStack {
-                Text("Cupertino, CA")
-                    .font(.system(size: 32, weight:.medium,))
-                    .foregroundColor(.white)
-                    .padding(.top, 20)
-                    .padding(.bottom, 40)
+            BackgroundView(isNight: $isNight)
                 
-                VStack(spacing: 10) {
-                    Image(systemName: "cloud.sun.fill")
-                        .renderingMode(.original)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 180, height: 140)
-                    
-                    Text("28°")
-                        .font(.system(size: 70, weight: .medium))
-                        .foregroundColor(.white)
+            VStack {
+                CityTextView(cityName: "Cupertino, CA")
+                
+                if isNight {
+                    MainWeatherStatusView(imageName: "moon.stars.fill", tempVal: 28)
+                } else {
+                    MainWeatherStatusView(imageName: "cloud.sun.fill", tempVal: 28)
                 }
-                .padding(.bottom, 40)
                 
                 HStack {
-                    
                     WeatherDayView(dayOfWeek: "Tue", imageName: "cloud.sun.fill", tempVal: 28)
                     WeatherDayView(dayOfWeek: "Wed", imageName: "sun.max.fill", tempVal: 32)
                     WeatherDayView(dayOfWeek: "Thu", imageName: "wind", tempVal: 25)
@@ -47,14 +36,13 @@ struct ContentView: View {
                 Spacer()
                 
                 Button {
-                    print("Tapped")
+                    isNight.toggle()
                 } label: {
-                    Text("Change Day Time")
-                        .frame(width: 280, height: 54, alignment: .center)
-                        .background(Color.white)
-                        .font(.system(size: 22, weight: .bold))
-                        .cornerRadius(15)
+                    WeatherButton(title: "Change Day Time",
+                                  textColor: .white,
+                                  backgroundColor: isNight ? Color("darkBlue") : .blue)
                 }
+                
                 Spacer()
             }
         }
@@ -66,7 +54,6 @@ struct ContentView: View {
 }
 
 struct WeatherDayView: View {
-    
     var dayOfWeek: String
     var imageName: String
     var tempVal: Int
@@ -87,5 +74,52 @@ struct WeatherDayView: View {
                 .font(.system(size: 30, weight: .bold))
                 .foregroundColor(.white)
         }
+    }
+}
+
+struct BackgroundView: View {
+    @Binding var isNight: Bool
+    
+    
+    var body: some View {
+        LinearGradient(gradient: Gradient(colors:
+                                            [isNight ? Color("darkBlue") : .blue,
+                                             isNight ? Color("horizonBlue") : .white]),
+                       startPoint: .topLeading,
+                       endPoint: .bottomTrailing)
+        .edgesIgnoringSafeArea(.all) // back ground color can ingnore safa area
+    }
+}
+
+struct CityTextView : View {
+    var cityName: String
+    
+    var body: some View {
+        Text(cityName)
+            .font(.system(size: 32, weight:.medium,))
+            .foregroundColor(.white)
+            .padding(.top, 20)
+            .padding(.bottom, 40)
+    }
+}
+
+struct MainWeatherStatusView: View {
+    var imageName: String
+    var tempVal: Int
+    
+    var body: some View {
+        VStack(spacing: 10) {
+            Image(systemName: imageName)
+                .renderingMode(.original)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 180, height: 130)
+                .padding(.bottom, 10)
+            
+            Text("\(tempVal)°")
+                .font(.system(size: 70, weight: .medium))
+                .foregroundColor(.white)
+        }
+        .padding(.bottom, 40)
     }
 }
