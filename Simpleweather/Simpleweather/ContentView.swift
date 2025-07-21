@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             
-            BackgroundView(isNight: $isNight)
+            BackgroundView(isNight: isNight)
                 
             VStack {
                 CityTextView(cityName: "Cupertino, CA")
@@ -26,11 +26,11 @@ struct ContentView: View {
                 }
                 
                 HStack {
-                    WeatherDayView(dayOfWeek: "Tue", imageName: "cloud.sun.fill", tempVal: 28)
-                    WeatherDayView(dayOfWeek: "Wed", imageName: "sun.max.fill", tempVal: 32)
-                    WeatherDayView(dayOfWeek: "Thu", imageName: "wind", tempVal: 25)
-                    WeatherDayView(dayOfWeek: "Fri", imageName: "sun.horizon.fill", tempVal: 12)
-                    WeatherDayView(dayOfWeek: "Sat", imageName: "moon.stars.fill", tempVal: 19)
+                    WeatherDayView(isNight: isNight, dayOfWeek: "Tue", imageName: "cloud.sun.fill", tempVal: 28)
+                    WeatherDayView(isNight: isNight, dayOfWeek: "Wed", imageName: "sun.max.fill", tempVal: 32)
+                    WeatherDayView(isNight: isNight, dayOfWeek: "Thu", imageName: "wind", tempVal: 25)
+                    WeatherDayView(isNight: isNight, dayOfWeek: "Fri", imageName: "sun.horizon.fill", tempVal: 12)
+                    WeatherDayView(isNight: isNight, dayOfWeek: "Sat", imageName: "moon.stars.fill", tempVal: 19)
                 }
                 
                 Spacer()
@@ -54,6 +54,7 @@ struct ContentView: View {
 }
 
 struct WeatherDayView: View {
+    var isNight: Bool
     var dayOfWeek: String
     var imageName: String
     var tempVal: Int
@@ -64,9 +65,16 @@ struct WeatherDayView: View {
                 .font(.system(size: 26, weight: .medium))
                 .foregroundColor(.white)
             
+            // .symbolRenderingMode(.palette) can be used to modify the color of each layer of the icon using foregroundStyle(.color1, .color2, .color3)
+
+            // .symbolRenderingMode(.hierarchical) renders monochrome icons, where each layer has a different opacity. The color of the icon can be chosen using .foregroundColor(.color1)
+
             Image(systemName: imageName)
-                .renderingMode(.original)
+                .symbolRenderingMode(.palette)
                 .resizable()
+                .foregroundStyle(
+                    .white,
+                    isNight ? .orange : .yellow)
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 60, height: 50)
             
@@ -78,8 +86,7 @@ struct WeatherDayView: View {
 }
 
 struct BackgroundView: View {
-    @Binding var isNight: Bool
-    
+    var isNight: Bool
     
     var body: some View {
         LinearGradient(gradient: Gradient(colors:
@@ -87,7 +94,15 @@ struct BackgroundView: View {
                                              isNight ? Color("horizonBlue") : .white]),
                        startPoint: .topLeading,
                        endPoint: .bottomTrailing)
-        .edgesIgnoringSafeArea(.all) // back ground color can ingnore safa area
+        .ignoresSafeArea(.all) // safe area is used to fill the entire screen
+        
+        // Alternative gradient method (less customizable, It's what Apple uses for its products):
+        // - can't use multiple colors
+        // - more subtle
+        //
+        //ContainerRelativeShape()
+        //    .fill(isNight ? Color("darkBlue").gradient : Color.blue.gradient)
+        //    .edgesIgnoringSafeArea(.all)
     }
 }
 
