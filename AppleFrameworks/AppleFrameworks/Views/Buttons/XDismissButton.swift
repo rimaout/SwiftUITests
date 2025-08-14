@@ -17,10 +17,17 @@ struct XDismissButton: View {
             Button {
                 isShowingModal = false
             } label: {
-                Image(systemName: "xmark")
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundColor(.secondary)
+                    .font(.title)
+                    .frame(width: 44, height: 44)
+                
+                /* --- Alternative ---
+                 Image(systemName: "xmark")
                     .foregroundColor(Color(.label)) //Color(.lable) is used to get withe in light mode and black in darkmode
                     .imageScale(.large)
                     .frame(width: 44, height: 44)
+                 */
             }
         }.padding()
     }
