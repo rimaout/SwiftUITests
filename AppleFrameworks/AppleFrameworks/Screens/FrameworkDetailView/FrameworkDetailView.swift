@@ -9,7 +9,6 @@ import SwiftUI
 
 struct FrameworkDetailView: View {
     let framework: Framework
-    @Binding var isShowingDetailView:Bool
     @State private var isShowingSafariView = false
     
     private var destinationURL: URL {
@@ -19,10 +18,6 @@ struct FrameworkDetailView: View {
     var body: some View {
         
         VStack {
-            XDismissButton(isShowingModal: $isShowingDetailView)
-            
-            Spacer()
-            
             Image(framework.imageName)
                 .resizable()
                 .frame(width: 90, height: 90, alignment: .center)
@@ -36,21 +31,6 @@ struct FrameworkDetailView: View {
             Text(framework.description)
                 .font(.body)
                 .padding()
-            
-            Spacer()
-            
-            Button {
-                isShowingSafariView = true
-            } label: {
-                Label("Learn More", systemImage: "book.fill")
-            }
-            .buttonStyle(.bordered)
-            .controlSize(.large)
-            .tint(.blue)
-            
-            //additional settings examples:
-            //.foregroundColor(.red)
-            //.buttonBorderShape(.roundedRectangle(radius:  20))
         }
         .sheet(isPresented: $isShowingSafariView) {
             SafariView(url: destinationURL)
@@ -59,7 +39,5 @@ struct FrameworkDetailView: View {
 }
 
 #Preview {
-    FrameworkDetailView(framework: MockData.sampleFramework,
-                        isShowingDetailView: .constant(false) //used to hardcode bindings in a view preview
-    )
+    FrameworkDetailView(framework: MockData.sampleFramework)
 }
