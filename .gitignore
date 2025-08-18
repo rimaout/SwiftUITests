@@ -72,3 +72,5 @@ WorkingWeather/WorkingWeather/ViewModel/APISecret.swift
 WorkingWeather/WorkingWeather.xcodeproj
 WorkingWeather/WorkingWeather.xcodeproj
 AppleFrameworks/AppleFrameworks.xcodeproj
+BarcodeScanner/BarcodeScanner.xcodeproj/project.pbxproj
+BarcodeScanner/BarcodeScanner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
