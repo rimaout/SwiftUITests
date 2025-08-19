@@ -5,11 +5,12 @@
 //  Created by Matteo on 19/08/25.
 //
 
-import Foundation
+import UIKit
 
 final class NetworkManager {
 
     static let shared = NetworkManager()
+    private let imgCache = NSCache<NSString, UIImage>()
 
     static let baseURL = "https://seanallen-course-backend.herokuapp.com/swiftui-fundamentals/"
         private let appetizerURL = baseURL + "appetizers"
@@ -50,6 +51,33 @@ final class NetworkManager {
         }
         task.resume()
     }
+    
+    func downloadImage(from urlString: String, completed: @escaping (UIImage?) -> Void) {
+        // if the operation fails no error are returned, because we a placeholder image will be displayed
+        
+        let cacheKey = NSString(string: urlString)
+        
+        if let image = imgCache.object(forKey: cacheKey) {
+            completed(image)
+            return
+        }
+        
+        guard let url = URL(string: urlString) else {
+            completed(nil)
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: URLRequest(url: url)) {data, response, error in
+                
+            guard let data = data, let image = UIImage(data: data) else {
+                completed(nil)
+                return
+            }
+            
+            self.imgCache.setObject(image, forKey: cacheKey)
+            completed(image)
+        }
+        
+        task.resume()
+    }
 }
-
-
