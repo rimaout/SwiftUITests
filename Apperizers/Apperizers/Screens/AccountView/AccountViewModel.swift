@@ -5,25 +5,22 @@
 //  Created by Matteo on 25/08/25.
 //
 
-import Foundation
+import SwiftUI
 
 final class AccountViewModel: ObservableObject {
-    @Published var firstName = ""
-    @Published var lastName = ""
-    @Published var email = ""
-    @Published var birthdate = Date()
-    @Published var lactoseIntolerance = false
-    @Published var celiac = false
     
+    @AppStorage("user") private var userData: Data?
+    
+    @Published var user = User()
     @Published var alertItem: AlertItem?
     
     var isValidForm: Bool {
-        guard !firstName.isEmpty && !lastName.isEmpty && !email.isEmpty else {
+        guard !user.firstName.isEmpty && !user.lastName.isEmpty && !user.email.isEmpty else {
             alertItem = AlertContext.invalidForm
             return false
         }
         
-        guard email.isValidEmail else {
+        guard user.email.isValidEmail else {
             alertItem = AlertContext.invalidEmail
             return false
         }
@@ -34,6 +31,23 @@ final class AccountViewModel: ObservableObject {
     func saveChanges() {
         guard isValidForm else { return }
         
-        print("changes saved succesfuly")
+        do {
+            let data = try JSONEncoder().encode(user)
+            userData = data
+            alertItem = AlertContext.userSaveSucces
+        } catch {
+            //This can happen only if there is a difference between what was stored and the structure of the User (model)
+            alertItem = AlertContext.invalidUserData
+        }
+    }
+    
+    func retirveUser() {
+        guard let userData = userData else { return }
+        
+        do {
+            user =  try JSONDecoder().decode(User.self, from: userData)
+        } catch {
+            alertItem = AlertContext.invalidUserData
+        }
     }
 }
