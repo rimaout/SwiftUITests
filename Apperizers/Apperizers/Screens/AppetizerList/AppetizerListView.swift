@@ -27,7 +27,7 @@ struct AppetizerListView: View {
                 .navigationTitle("🍟 Appetizers")
                 .disabled(viewModel.isShowingDetail) // Disable interaction with list (scrolling and tappping is the modal (AppetizerDetailCardView) is active
             }
-            .onAppear {
+            .task {
                 viewModel.getAppetizers() // Initial data fetch
             }
             .refreshable {

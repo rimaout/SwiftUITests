@@ -13,43 +13,25 @@ final class NetworkManager {
     private let imgCache = NSCache<NSString, UIImage>()
 
     static let baseURL = "https://seanallen-course-backend.herokuapp.com/swiftui-fundamentals/"
-        private let appetizerURL = baseURL + "appetizers"
+    private let appetizerURL = baseURL + "appetizers"
     
     private init() {}
     
-    func getAppetizers(completed: @escaping (Result<[Appetizer], APError>) -> Void) {
+    func getAppetizers() async throws -> [Appetizer] {
         
         guard let url = URL(string: appetizerURL) else {
-            completed(.failure(.invalidURL))
-            return
+            throw APError.invalidURL
         }
         
-        let task = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, error in
-            
-            if let _ = error {
-                completed(.failure(.unableToComplete)) // usualy apens if not connected to internet
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completed(.failure(.invalidResponse))
-                return
-            }
-            
-            guard let data = data else {
-                completed(.failure(.invalidData))
-                return
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                let decodedResponde = try decoder.decode(AppetizerResponse.self, from: data)
-                completed(.success(decodedResponde.request))
-            } catch {
-                completed(.failure(.invalidData))
-            }
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        do {
+            let decoder = JSONDecoder()
+            let decodedResponde = try decoder.decode(AppetizerResponse.self, from: data)
+            return decodedResponde.request
+        } catch {
+            throw APError.invalidData
         }
-        task.resume()
     }
     
     func downloadImage(from urlString: String, completed: @escaping (UIImage?) -> Void) {
