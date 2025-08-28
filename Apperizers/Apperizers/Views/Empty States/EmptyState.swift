@@ -14,14 +14,12 @@ struct EmptyState: View {
     var body: some View {
         ZStack {
             Color(.systemBackground)
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea()
             
             VStack {
                 Image(imageName)
                     .resizable()
                     .scaledToFit()
-                    
-                
                     .frame(height: 150)
 
                 Text(message)
