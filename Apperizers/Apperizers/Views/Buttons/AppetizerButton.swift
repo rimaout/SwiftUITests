@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+//NOTE: NOT USED IN THE PROJECT ANYMORE, it is still here only for learning purposes.
+
 struct AppetizerButton: View {
     let title: String
     

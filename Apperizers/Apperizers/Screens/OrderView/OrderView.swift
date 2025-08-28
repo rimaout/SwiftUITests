@@ -28,15 +28,18 @@ struct OrderView: View {
                      */
                 }
                 .listStyle(PlainListStyle())
+                .listRowSeparator(.hidden)
                 .navigationTitle("🧾 Orders")
                 
                 Spacer()
                 
-                Button {
-                    print("ciao")
+                Button () {
+                    print("API CALL")
                 } label: {
-                    AppetizerButton(title: "$" + String(order.totalPrice) + " - Place Order")
-                }.padding(.bottom, 25)
+                    Text("$" + String(order.totalPrice) + " - Place Order")
+                }
+                .modifier(StandardButtonStyle())
+                .padding(.bottom, 25)
     
             }
             

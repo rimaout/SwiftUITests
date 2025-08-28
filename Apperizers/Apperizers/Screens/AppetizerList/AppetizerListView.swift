@@ -16,6 +16,8 @@ struct AppetizerListView: View {
             NavigationStack {
                 List(viewModel.appetizers) { appetizer in
                     AppetizerCellView(appetizer: appetizer)
+                        .listRowSeparator(.hidden)
+                        //.listRowSeparatorTint(Color.brandPrimary) example of colored separator lines
                         .onTapGesture {
                             viewModel.selectedAppetizer = appetizer
                             viewModel.isShowingDetail = true
