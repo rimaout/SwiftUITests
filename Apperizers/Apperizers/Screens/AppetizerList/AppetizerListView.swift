@@ -21,6 +21,7 @@ struct AppetizerListView: View {
                             viewModel.isShowingDetail = true
                         }
                 }
+                .listStyle(PlainListStyle())
                 .navigationTitle("🍟 Appetizers")
                 .disabled(viewModel.isShowingDetail) // Disable interaction with list (scrolling and tappping is the modal (AppetizerDetailCardView) is active
             }
@@ -45,31 +46,6 @@ struct AppetizerListView: View {
             Alert(title: alertItem.title,
                   message: alertItem.message,
                   dismissButton: alertItem.dismissButton)
-        }
-    }
-}
-
-struct AppetizerCellView: View {
-    let appetizer: Appetizer
-    
-    var body: some View {
-        HStack { 
-            AppetizerRemoteImage(urlString: appetizer.imageURL)
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 120, height: 90)
-                .cornerRadius(8)
-            
-            VStack(alignment: .leading, spacing: 10) {
-                Text(appetizer.name)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                
-                Text("$\(appetizer.price, specifier: "%.2f")")
-                    .bold()
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.leading)
         }
     }
 }

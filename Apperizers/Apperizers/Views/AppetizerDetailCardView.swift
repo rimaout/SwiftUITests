@@ -9,6 +9,8 @@ import SwiftUI
 
 struct AppetizerDetailCardView: View {
     
+    @EnvironmentObject var order: Order
+    
     let appetizer: Appetizer
     @Binding var isShowingDetail: Bool
     
@@ -36,11 +38,12 @@ struct AppetizerDetailCardView: View {
             }
             
             Spacer()
-            
+             
             Button {
-                print("")
+                order.add(appetizer)
+                isShowingDetail = false
             } label: {
-                AppetizerButton(title: String(appetizer.price) + " - Add to Order")
+                AppetizerButton(title: "$" + String(appetizer.price) + " - Add to Order")
             }
             .padding(.bottom, 30)
         }
